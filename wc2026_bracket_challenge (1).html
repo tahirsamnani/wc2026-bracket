@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 · Bracket Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --grn:#0a5c36;--grn-mid:#1a7a4a;--grn-lt:#e8f5ee;
+  --gold:#c8972a;--gold-lt:#fdf3dc;--red:#c0392b;
+  --bg:#f0f2f0;--card:#fff;--border:#d8ddd8;
+  --txt:#1a1a1a;--muted:#6b7280;
+  --c32:#1a5276;--c16:#6c3483;--cqf:#922b21;--csf:#c0392b;--cf:#c8972a;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px}
+.hdr{background:var(--grn);color:#fff;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(255,255,255,.02) 50px,rgba(255,255,255,.02) 100px);pointer-events:none}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;position:relative;z-index:1;flex-wrap:wrap;gap:12px}
+.hdr h1{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;color:#fff}
+.hdr h1 em{color:var(--gold);font-style:normal}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,.6);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px}
+.nav{display:flex;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.08);overflow-x:auto}
+.ntab{padding:10px 18px;color:rgba(255,255,255,.65);cursor:pointer;font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;border:none;background:transparent;border-bottom:2px solid transparent;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:color .15s}
+.ntab:hover{color:#fff}.ntab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.uchip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border-radius:20px;padding:6px 13px;cursor:pointer;color:#fff;font-size:12px;font-weight:500;border:1px solid rgba(255,255,255,.18);font-family:'DM Sans',sans-serif;transition:background .15s}
+.uchip:hover{background:rgba(255,255,255,.22)}
+.main{padding:20px 24px;max-width:1380px;margin:0 auto}
+.page{display:none}.page.on{display:block}
+.btn{padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .18s;letter-spacing:.2px}
+.btn:active{transform:scale(.97)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+.btn-g{background:var(--grn);color:#fff}.btn-g:hover{background:var(--grn-mid);transform:translateY(-1px)}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{opacity:.9;transform:translateY(-1px)}
+.btn-ol{background:var(--card);color:var(--grn);border:1.5px solid var(--grn)}.btn-ol:hover{background:var(--grn-lt)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.fi{margin-bottom:14px}.fi label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.fi input{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--card);color:var(--txt);outline:none;transition:border-color .15s}
+.fi input:focus{border-color:var(--grn)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.pill{display:inline-block;background:var(--gold-lt);color:#7a5c00;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;border:1px solid #e8c97a}
+.dbadge{background:#fff3cd;border:1px solid #ffc107;color:#856404;font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600}
+.notice{background:var(--gold-lt);border:1px solid #e8c97a;border-radius:10px;padding:12px 15px;font-size:13px;color:#7a5c00;margin-bottom:16px;line-height:1.6}
+.sec-ttl{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:1px;margin-bottom:4px}
+.sec-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+/* LOGIN */
+.login-wrap{display:flex;justify-content:center;padding:36px 16px}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px;width:100%;max-width:500px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.07)}
+.lcard h2{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:1px;color:var(--grn);margin-bottom:8px}
+.lcard p{color:var(--muted);font-size:13px;line-height:1.65;margin-bottom:20px}
+.pguide{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.pgc{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px}
+.pgpts{font-family:'Bebas Neue',cursive;font-size:24px;color:var(--grn)}
+.pglbl{font-size:11px;color:var(--muted);margin-top:1px}
+/* GROUPS */
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:14px;margin-bottom:22px}
+.gc{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.gh{background:var(--grn);color:#fff;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+.gh h3{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:.5px}
+.gb{padding:10px 12px}
+.grp-note{font-size:11px;color:var(--muted);margin-bottom:7px;padding:0 4px}
+.tr{display:flex;align-items:center;gap:7px;padding:5px 4px;border-radius:6px;margin-bottom:3px}
+.pb{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:#e5e5e5;color:#aaa;transition:all .2s}
+.p1{background:#ffd700!important;color:#7a5c00!important}
+.p2{background:#c0c0c0!important;color:#444!important}
+.p3{background:#cd7f32!important;color:#fff!important}
+.p4{background:#ddd!important;color:#888!important}
+.tflag{font-size:17px;flex-shrink:0}.tnm{flex:1;font-size:12px;font-weight:500}
+.rank-btns{display:flex;gap:3px}
+.rbtn{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;font-family:'DM Sans',sans-serif;padding:0}
+.rbtn:hover:not(:disabled){background:var(--grn-lt);border-color:var(--grn);color:var(--grn)}
+.rbtn.picked{background:var(--grn);color:#fff;border-color:var(--grn)}
+.rbtn:disabled{opacity:.25;cursor:not-allowed}
+/* KNOCKOUT */
+.ko-sec{margin-bottom:26px}
+.rh{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}
+.rbadge{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:.5px;padding:4px 13px;border-radius:20px;color:#fff}
+.r32{background:var(--c32)}.r16{background:var(--c16)}.rqf{background:var(--cqf)}.rsf{background:var(--csf)}.rf{background:var(--cf)}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ms{display:flex;align-items:center;padding:9px 12px;gap:8px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border)}
+.ms:last-child{border-bottom:none}.ms:hover{background:var(--grn-lt)}
+.ms.sel{background:var(--grn-lt);border-left:3px solid var(--grn)}
+.ms .mfl{font-size:17px;flex-shrink:0}.ms .mnm{flex:1;font-size:12px;font-weight:500}.ms .mck{color:var(--grn);font-size:14px}
+.mvs{text-align:center;font-size:10px;color:var(--muted);padding:3px;background:var(--bg);font-weight:600;letter-spacing:1px}
+/* LEADERBOARD */
+.lbtbl{width:100%;border-collapse:collapse}
+.lbtbl th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1.5px solid var(--border)}
+.lbtbl td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px}
+.lbtbl tr:last-child td{border-bottom:none}.lbtbl tbody tr:hover td{background:var(--grn-lt)}
+.rnum{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--muted)}
+.r1 .rnum{color:var(--gold)}.r2 .rnum{color:#888}.r3 .rnum{color:#cd7f32}
+.sbig{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--grn)}
+.pbw{background:var(--bg);border-radius:3px;height:5px;min-width:70px;margin-top:3px}
+.pbf{background:var(--grn);height:5px;border-radius:3px;transition:width .5s}
+.av{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* SAVE BAR */
+.sbar{position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:100;box-shadow:0 -4px 16px rgba(0,0,0,.07);margin:0 -24px;flex-wrap:wrap}
+.sbar-inf{font-size:12px;color:var(--muted)}
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--grn);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:9999;opacity:0;transition:opacity .25s,transform .25s;transform:translateY(8px);pointer-events:none;max-width:320px}
+.toast.show{opacity:1;transform:translateY(0)}.toast.err{background:var(--red)}
+/* SETUP MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8000;overflow-y:auto;padding:30px 16px}
+.modal-box{background:#fff;border-radius:16px;max-width:580px;margin:0 auto;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.setup-steps{background:#eef4ff;border:1.5px solid #b3c9f7;border-radius:10px;padding:20px;margin-bottom:20px}
+.setup-steps h3{font-family:'Bebas Neue',cursive;font-size:17px;letter-spacing:.5px;color:#1a3a8a;margin-bottom:10px}
+.setup-steps ol{padding-left:18px;color:#1a3a8a;font-size:13px;line-height:2.1}
+.setup-steps a{color:#1a3a8a;font-weight:600}
+.setup-steps code{background:#dde8fc;padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;word-break:break-all}
+/* MISC */
+.spin{border:2px solid var(--border);border-top-color:var(--grn);border-radius:50%;width:26px;height:26px;animation:sp .7s linear infinite;margin:36px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);line-height:1.9}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.srow{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.psel-res{appearance:none;border:1.5px solid var(--border);border-radius:6px;padding:3px 6px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;background:var(--card);color:var(--txt);width:56px;text-align:center}
+.psel-res:focus{outline:none;border-color:var(--grn)}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}.main{padding:14px 16px}.sbar{margin:0 -16px;padding:12px 16px}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- ══ SETUP MODAL ══ -->
+<div id="setupModal" class="modal-bg">
+  <div class="modal-box">
+    <div style="font-size:36px;margin-bottom:10px">🔧</div>
+    <h2 style="font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:1px;color:var(--grn);margin-bottom:6px">One-Time Setup</h2>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px">
+      This app stores everyone's brackets on <strong>JSONBin.io</strong> — a free cloud database that needs no coding. Complete this setup once, then share the URL with your colleagues. Takes about 3 minutes.
+    </p>
+    <div class="setup-steps">
+      <h3>📋 Step-by-step</h3>
+      <ol>
+        <li>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and sign up free</li>
+        <li>Click <strong>"+ New Bin"</strong>, paste this exactly into the editor:<br>
+            <code>{"users":[],"results":{"groups":{},"knockout":{}}}</code><br>
+            Name it <strong>WC2026-Shared</strong> and click Save</li>
+        <li>After saving, copy the <strong>BIN ID</strong> shown (e.g. <code>664ab12c...</code>)</li>
+        <li>Go to <strong>Account → API Keys</strong>, copy your <strong>X-Master-Key</strong></li>
+        <li>Paste both below and click Save</li>
+      </ol>
+    </div>
+    <div class="fi"><label>X-Master-Key (from Account → API Keys)</label><input type="password" id="cfgKey" placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"></div>
+    <div class="fi"><label>Shared Bin ID (from the WC2026-Shared bin)</label><input type="text" id="cfgBinId" placeholder="664ab12c..."></div>
+    <button class="btn btn-g" style="width:100%;margin-top:8px" onclick="saveConfig()">Save & Start Playing →</button>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center;font-style:italic">Your key is stored only in your browser. It is sent only to JSONBin's servers.</p>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <h1>⚽ World Cup <em>2026</em> Bracket Challenge</h1>
+      <div class="hdr-sub">USA · Canada · Mexico &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="uchip" class="uchip" onclick="doLogout()" style="display:none">
+        <div class="av" id="avltr"></div>
+        <span id="chipnm"></span>
+        <span style="opacity:.45;font-size:10px;margin-left:2px">✕</span>
+      </div>
+      <span style="font-size:30px">🏆</span>
+    </div>
+  </div>
+  <div class="nav" id="nav" style="display:none">
+    <button class="ntab on"  onclick="gp('groups')">Group Stage</button>
+    <button class="ntab"     onclick="gp('knockout')">Knockout</button>
+    <button class="ntab"     onclick="gp('leaderboard')">Leaderboard</button>
+    <button class="ntab"     onclick="gp('results')">Enter Results</button>
+    <button class="ntab"     onclick="gp('howto')">How to Play</button>
+    <button class="ntab"     onclick="openSetup()" style="color:rgba(255,255,255,.4);font-size:11px">⚙ Config</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- LOGIN -->
+<div id="pg-login" class="page on">
+  <div class="login-wrap">
+    <div class="lcard">
+      <div style="font-size:52px;margin-bottom:10px">⚽</div>
+      <h2>Join the Challenge</h2>
+      <p>Predict group standings and knockout winners for FIFA World Cup 2026. Everyone's picks sync to a shared live leaderboard!</p>
+      <div class="pguide">
+        <div class="pgc"><div class="pgpts">1</div><div class="pglbl">Group position</div></div>
+        <div class="pgc"><div class="pgpts">2</div><div class="pglbl">Round of 32</div></div>
+        <div class="pgc"><div class="pgpts">3</div><div class="pglbl">Round of 16</div></div>
+        <div class="pgc"><div class="pgpts">5</div><div class="pglbl">Quarterfinal</div></div>
+        <div class="pgc"><div class="pgpts">8</div><div class="pglbl">Semifinal</div></div>
+        <div class="pgc"><div class="pgpts" style="color:var(--gold)">13</div><div class="pglbl">🏆 Champion</div></div>
+      </div>
+      <div class="fi"><label>Your Name</label><input id="lname" type="text" placeholder="e.g. Tahir Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-g" style="width:100%;margin-top:4px" id="lbtn" onclick="doLogin()">Enter My Bracket →</button>
+      <p style="font-size:11px;color:var(--muted);margin-top:12px;font-style:italic">Picks are saved to the cloud. Share this page URL with colleagues — everyone sees the same live leaderboard!</p>
+    </div>
+  </div>
+</div>
+
+<!-- GROUPS -->
+<div id="pg-groups" class="page">
+  <div class="srow">
+    <div><div class="sec-ttl">Group Stage Predictions</div>
+    <div class="sec-sub">Predict final standings 1–4 for all 12 groups · <span class="pill">1 pt per correct position</span></div></div>
+    <span class="dbadge">🗓 Deadline: June 11, 2026</span>
+  </div>
+  <div class="gg" id="ggrid"></div>
+  <div class="sbar">
+    <span class="sbar-inf">Click position buttons to rank teams — each number can only be used once per group</span>
+    <button class="btn btn-g" id="saveGBtn" onclick="saveGroups()">💾 Save Group Picks</button>
+  </div>
+</div>
+
+<!-- KNOCKOUT -->
+<div id="pg-knockout" class="page">
+  <div style="margin-bottom:16px">
+    <div class="sec-ttl">Knockout Stage Predictions</div>
+    <div class="sec-sub">Click a team to pick them as match winner · Points increase each round</div>
+  </div>
+  <div id="kocontent"></div>
+  <div class="sbar">
+    <span class="sbar-inf">Click a team in each match to select the winner</span>
+    <button class="btn btn-g" id="saveKOBtn" onclick="saveKnockout()">💾 Save Knockout Picks</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="pg-leaderboard" class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div><div class="sec-ttl">Leaderboard</div>
+    <div class="sec-sub">Live standings · synced from cloud across all devices</div></div>
+    <button class="btn btn-ol btn-sm" onclick="renderLeaderboard()">↺ Refresh</button>
+  </div>
+  <div id="lbcontent"><div class="spin"></div></div>
+</div>
+
+<!-- RESULTS -->
+<div id="pg-results" class="page">
+  <div style="margin-bottom:16px">
+    <div class="sec-ttl">Enter Official Results</div>
+    <div class="sec-sub">Input real match outcomes to automatically score all brackets</div>
+  </div>
+  <div class="notice">⚙️ <strong>Anyone can enter results.</strong> They sync instantly for all participants. Double-check before saving!</div>
+  <div id="rescontent"></div>
+  <div class="sbar">
+    <span class="sbar-inf">Enter actual outcomes to score everyone's picks</span>
+    <button class="btn btn-gold" id="saveResBtn" onclick="saveResults()">✓ Save Official Results</button>
+  </div>
+</div>
+
+<!-- HOW TO PLAY -->
+<div id="pg-howto" class="page">
+  <div class="sec-ttl" style="margin-bottom:6px">How to Play</div>
+  <div class="sec-sub">Everything you need to know</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">🔧</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">First-Time Setup (Organiser Only)</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75">1. Sign up free at <strong>jsonbin.io</strong><br>2. Create a new bin with the starter JSON<br>3. Copy your Bin ID and API Key<br>4. Click ⚙ Config and paste them in<br>5. Host this file on GitHub Pages<br>6. Share the URL — done!</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">👤</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">For Participants</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75">1. Open the shared URL<br>2. Enter your name<br>3. Fill in Group Stage predictions<br>4. Fill in Knockout picks<br>5. Hit Save — you're in the competition!</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">🏆</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">Scoring System</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75"><b>Group positions:</b> 1 pt each<br><b>Round of 32:</b> 2 pts/pick<br><b>Round of 16:</b> 3 pts/pick<br><b>Quarterfinals:</b> 5 pts/pick<br><b>Semifinals:</b> 8 pts/pick<br><b>Champion 🏆:</b> 13 pts</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">📅</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">Key Dates</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75"><b>Tournament starts:</b> June 11, 2026<br><b>Group stage ends:</b> June 27<br><b>Round of 32:</b> Jun 28 – Jul 3<br><b>Round of 16:</b> Jul 4–7<br><b>Quarterfinals:</b> Jul 9–11<br><b>Semifinals:</b> Jul 14–15<br><b>Final:</b> July 19, 2026</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">💡</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">Tips</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75">• Submit all picks before June 11 — deadline is strict!<br>• Knockout picks can be updated between rounds<br>• Champion pick is worth the most (13 pts)<br>• Anyone can enter official results in the Results tab</p>
+    </div>
+    <div class="card">
+      <div style="font-size:24px;margin-bottom:8px">🌐</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:.5px;color:var(--grn);margin-bottom:8px">GitHub Pages Hosting</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.75">1. Create a free account at <strong>github.com</strong><br>2. Create a new repository<br>3. Upload this HTML file as <strong>index.html</strong><br>4. Go to Settings → Pages → set source to main branch<br>5. GitHub gives you a free URL to share!</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════════════════
+// TOURNAMENT DATA
+// ══════════════════════════════════════════════════
+const GROUPS = {
+  A:{t:[['🇲🇽','Mexico'],      ['🇿🇦','South Africa'], ['🇰🇷','South Korea'],['🇨🇿','Czechia']]},
+  B:{t:[['🇨🇦','Canada'],      ['🇧🇦','Bosnia & Herz.'],['🇶🇦','Qatar'],      ['🇨🇭','Switzerland']]},
+  C:{t:[['🇧🇷','Brazil'],      ['🇲🇦','Morocco'],      ['🇭🇹','Haiti'],       ['🏴󠁧󠁢󠁳󠁣󠁴󠁿','Scotland']]},
+  D:{t:[['🇺🇸','USA'],         ['🇵🇾','Paraguay'],     ['🇦🇺','Australia'],   ['🇹🇷','Türkiye']]},
+  E:{t:[['🇩🇪','Germany'],     ['🇨🇼','Curaçao'],      ['🇨🇮','Ivory Coast'], ['🇪🇨','Ecuador']]},
+  F:{t:[['🇳🇱','Netherlands'], ['🇯🇵','Japan'],        ['🇸🇪','Sweden'],      ['🇹🇳','Tunisia']]},
+  G:{t:[['🇧🇪','Belgium'],     ['🇪🇬','Egypt'],        ['🇮🇷','Iran'],        ['🇳🇿','New Zealand']]},
+  H:{t:[['🇪🇸','Spain'],       ['🇨🇻','Cape Verde'],   ['🇸🇦','Saudi Arabia'],['🇺🇾','Uruguay']]},
+  I:{t:[['🇫🇷','France'],      ['🇸🇳','Senegal'],      ['🇮🇶','Iraq'],        ['🇳🇴','Norway']]},
+  J:{t:[['🇦🇷','Argentina'],   ['🇩🇿','Algeria'],      ['🇦🇹','Austria'],     ['🇯🇴','Jordan']]},
+  K:{t:[['🇵🇹','Portugal'],    ['🇨🇩','DR Congo'],     ['🇺🇿','Uzbekistan'],  ['🇨🇴','Colombia']]},
+  L:{t:[['🏴󠁧󠁢󠁥󠁮󠁧󠁿','England'],     ['🇭🇷','Croatia'],     ['🇬🇭','Ghana'],       ['🇵🇦','Panama']]}
+};
+
+const R32 = [
+  {a:'A1',b:'B2'},{a:'C1',b:'D2'},{a:'E1',b:'F2'},{a:'G1',b:'H2'},
+  {a:'I1',b:'J2'},{a:'K1',b:'L2'},{a:'B1',b:'A2'},{a:'D1',b:'C2'},
+  {a:'F1',b:'E2'},{a:'H1',b:'G2'},{a:'J1',b:'I2'},{a:'L1',b:'K2'},
+  {a:'Best 3rd (TBD)',b:'Group Winner TBD',tbd:true},
+  {a:'Best 3rd (TBD)',b:'Group Winner TBD',tbd:true},
+  {a:'Best 3rd (TBD)',b:'Group Winner TBD',tbd:true},
+  {a:'Best 3rd (TBD)',b:'Group Winner TBD',tbd:true}
+];
+
+const ROUNDS=[
+  {key:'r32',  label:'Round of 32',   cls:'r32',pts:2, n:16},
+  {key:'r16',  label:'Round of 16',   cls:'r16',pts:3, n:8},
+  {key:'qf',   label:'Quarterfinals', cls:'rqf',pts:5, n:4},
+  {key:'sf',   label:'Semifinals',    cls:'rsf',pts:8, n:2},
+  {key:'final',label:'Final',         cls:'rf', pts:13,n:1}
+];
+const PREV={r16:'r32',qf:'r16',sf:'qf',final:'sf'};
+const RPTS={r32:2,r16:3,qf:5,sf:8,final:13};
+
+// ══════════════════════════════════════════════════
+// CONFIG + JSONBIN
+// ══════════════════════════════════════════════════
+const CFG_LS = 'wc2026_cfg';
+const LS = 'wc2026_';
+
+function cfg()   { try{return JSON.parse(localStorage.getItem(CFG_LS))||{};}catch{return{};} }
+function lsGet(k){ try{return JSON.parse(localStorage.getItem(LS+k));}catch{return null;} }
+function lsSet(k,v){ try{localStorage.setItem(LS+k,JSON.stringify(v));}catch{} }
+
+function isConfigured(){ const c=cfg(); return !!(c.apiKey&&c.sharedBinId); }
+
+function openSetup(){
+  const c=cfg();
+  if(c.apiKey) document.getElementById('cfgKey').value=c.apiKey;
+  if(c.sharedBinId) document.getElementById('cfgBinId').value=c.sharedBinId;
+  document.getElementById('setupModal').style.display='block';
+}
+
+function saveConfig(){
+  const k=document.getElementById('cfgKey').value.trim();
+  const b=document.getElementById('cfgBinId').value.trim();
+  if(!k||!b){alert('Please fill in both fields.');return;}
+  localStorage.setItem(CFG_LS,JSON.stringify({apiKey:k,sharedBinId:b}));
+  document.getElementById('setupModal').style.display='none';
+  toast('Configuration saved! ✓');
+}
+
+const JB='https://api.jsonbin.io/v3';
+function jbH(){ return {'Content-Type':'application/json','X-Master-Key':cfg().apiKey,'X-Bin-Versioning':'false'}; }
+
+async function jbGet(binId){
+  const r=await fetch(`${JB}/b/${binId}/latest`,{headers:jbH()});
+  if(!r.ok) throw new Error('JSONBin read failed ('+r.status+')');
+  return (await r.json()).record;
+}
+
+async function jbSet(binId,data){
+  const r=await fetch(`${JB}/b/${binId}`,{method:'PUT',headers:jbH(),body:JSON.stringify(data)});
+  if(!r.ok) throw new Error('JSONBin write failed ('+r.status+')');
+  return r.json();
+}
+
+async function jbCreate(name,data){
+  const r=await fetch(`${JB}/b`,{method:'POST',headers:{...jbH(),'X-Bin-Name':name,'X-Bin-Private':'true'},body:JSON.stringify(data)});
+  if(!r.ok) throw new Error('JSONBin create failed ('+r.status+')');
+  return (await r.json()).metadata.id;
+}
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let user=null, local={groups:{},knockout:{}}, pendingResults=null;
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!isConfigured()) openSetup();
+});
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+async function doLogin(){
+  if(!isConfigured()){openSetup();return;}
+  const nm=document.getElementById('lname').value.trim();
+  if(!nm){toast('Please enter your name',true);return;}
+  const btn=document.getElementById('lbtn');
+  btn.disabled=true; btn.textContent='Loading…';
+  user=nm;
+  try{
+    const shared=await jbGet(cfg().sharedBinId);
+    const users=shared.users||[];
+    const entry=users.find(u=>u.name===nm);
+    if(entry){
+      try{ local=await jbGet(entry.binId); lsSet('bracket_'+nm,local); lsSet('binId_'+nm,entry.binId); }
+      catch{ local=lsGet('bracket_'+nm)||{groups:{},knockout:{}}; }
+    } else {
+      local=lsGet('bracket_'+nm)||{groups:{},knockout:{}};
+      const newId=await jbCreate('WC2026-'+nm,local);
+      lsSet('binId_'+nm,newId);
+      users.push({name:nm,binId:newId});
+      shared.users=users;
+      await jbSet(cfg().sharedBinId,shared);
+    }
+    revealApp(nm);
+  } catch(e){
+    local=lsGet('bracket_'+nm)||{groups:{},knockout:{}};
+    revealApp(nm);
+    toast('Offline — picks saved locally until reconnected',true);
+  }
+  btn.disabled=false; btn.textContent='Enter My Bracket →';
+}
+
+function revealApp(nm){
+  document.getElementById('uchip').style.display='flex';
+  document.getElementById('avltr').textContent=nm.charAt(0).toUpperCase();
+  document.getElementById('chipnm').textContent=nm;
+  document.getElementById('nav').style.display='flex';
+  gp('groups');
+  toast('Welcome, '+nm+'! ⚽');
+}
+
+function doLogout(){
+  if(!confirm('Log out? Your picks are saved.'))return;
+  user=null; local={groups:{},knockout:{}};
+  document.getElementById('uchip').style.display='none';
+  document.getElementById('nav').style.display='none';
+  document.getElementById('lname').value='';
+  showPg('login');
+}
+
+// ══════════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════════
+function showPg(p){ document.querySelectorAll('.page').forEach(el=>el.classList.remove('on')); document.getElementById('pg-'+p).classList.add('on'); }
+function gp(p){
+  const pages=['groups','knockout','leaderboard','results','howto'];
+  document.querySelectorAll('.ntab').forEach((t,i)=>t.classList.toggle('on',pages[i]===p));
+  showPg(p);
+  if(p==='groups')renderGroups();
+  if(p==='knockout')renderKO();
+  if(p==='leaderboard')renderLeaderboard();
+  if(p==='results')renderResults();
+}
+
+// ══════════════════════════════════════════════════
+// GROUP STAGE
+// ══════════════════════════════════════════════════
+function renderGroups(){
+  const grid=document.getElementById('ggrid'); grid.innerHTML='';
+  Object.entries(GROUPS).forEach(([g,data])=>{
+    const saved=local.groups[g]||{};
+    const posUsed={};
+    Object.entries(saved).forEach(([t,p])=>{if(p)posUsed[p]=t;});
+    const div=document.createElement('div'); div.className='gc';
+    div.innerHTML=`
+      <div class="gh"><h3>Group ${g}</h3><span style="font-size:10px;opacity:.7">SET POSITIONS 1–4</span></div>
+      <div class="gb">
+        <div class="grp-note">Each position can only be assigned to one team</div>
+        ${data.t.map((t)=>{
+          const p=saved[t[1]]||null;
+          return `<div class="tr">
+            <div class="pb ${p?'p'+p:''}">${p||'?'}</div>
+            <span class="tflag">${t[0]}</span>
+            <span class="tnm">${t[1]}</span>
+            <div class="rank-btns">
+              ${[1,2,3,4].map(pos=>{
+                const picked=p===pos;
+                const taken=posUsed[pos]&&posUsed[pos]!==t[1];
+                return `<button class="rbtn${picked?' picked':''}" onclick="pickPos('${g}','${t[1]}',${pos})" ${taken&&!picked?'disabled':''}>${pos}</button>`;
+              }).join('')}
+            </div></div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function pickPos(g,team,pos){
+  if(!local.groups[g])local.groups[g]={};
+  const s=local.groups[g];
+  if(s[team]===pos){delete s[team];}
+  else{Object.keys(s).forEach(t=>{if(s[t]===pos)delete s[t];}); s[team]=pos;}
+  lsSet('bracket_'+user,local); renderGroups();
+}
+
+async function saveGroups(){
+  const btn=document.getElementById('saveGBtn'); btn.disabled=true; btn.textContent='Saving…';
+  try{ const id=lsGet('binId_'+user); if(id)await jbSet(id,local); lsSet('bracket_'+user,local); toast('Group picks saved to cloud! ✓'); }
+  catch{ lsSet('bracket_'+user,local); toast('Saved locally (offline)',true); }
+  btn.disabled=false; btn.textContent='💾 Save Group Picks';
+}
+
+// ══════════════════════════════════════════════════
+// KNOCKOUT
+// ══════════════════════════════════════════════════
+function slotTeam(slot){
+  const m=slot.match(/^([A-L])([1-4])$/);
+  if(!m)return{fl:'❓',nm:slot};
+  const gd=local.groups[m[1]]||{};
+  const e=Object.entries(gd).find(([,p])=>p===+m[2]);
+  if(!e)return{fl:'❓',nm:`Group ${m[1]} · P${m[2]}`};
+  const td=GROUPS[m[1]].t.find(t=>t[1]===e[0]);
+  return{fl:td?td[0]:'🏳',nm:e[0]};
+}
+
+function renderKO(){
+  const el=document.getElementById('kocontent'); el.innerHTML='';
+  ROUNDS.forEach(r=>{
+    const sec=document.createElement('div'); sec.className='ko-sec';
+    const grid=document.createElement('div'); grid.className='mg';
+    for(let m=0;m<r.n;m++){
+      let tA,tB;
+      if(r.key==='r32'){const mu=R32[m]; tA=mu.tbd?{fl:'⚔️',nm:mu.a}:slotTeam(mu.a); tB=mu.tbd?{fl:'⚔️',nm:mu.b}:slotTeam(mu.b);}
+      else{ const pp=local.knockout[PREV[r.key]]||{}; tA=pp['m'+(m*2)]||{fl:'⚔️',nm:'Winner M'+(m*2+1)}; tB=pp['m'+(m*2+1)]||{fl:'⚔️',nm:'Winner M'+(m*2+2)}; }
+      const sv=(local.knockout[r.key]||{})['m'+m];
+      const aS=sv&&sv.nm===tA.nm, bS=sv&&sv.nm===tB.nm;
+      const mc=document.createElement('div'); mc.className='mc';
+      const sA=document.createElement('div'); sA.className='ms'+(aS?' sel':'');
+      sA.innerHTML=`<span class="mfl">${tA.fl}</span><span class="mnm">${tA.nm}</span>${aS?'<span class="mck">✓</span>':''}`;
+      sA.onclick=()=>pickW(r.key,'m'+m,tA);
+      const vs=document.createElement('div'); vs.className='mvs'; vs.textContent='VS';
+      const sB=document.createElement('div'); sB.className='ms'+(bS?' sel':'');
+      sB.innerHTML=`<span class="mfl">${tB.fl}</span><span class="mnm">${tB.nm}</span>${bS?'<span class="mck">✓</span>':''}`;
+      sB.onclick=()=>pickW(r.key,'m'+m,tB);
+      mc.appendChild(sA); mc.appendChild(vs); mc.appendChild(sB); grid.appendChild(mc);
+    }
+    sec.innerHTML=`<div class="rh"><span class="rbadge ${r.cls}">${r.label}</span><span class="pill">${r.pts} pts per correct pick</span></div>`;
+    sec.appendChild(grid); el.appendChild(sec);
+  });
+}
+
+function pickW(rk,mk,team){
+  if(!local.knockout[rk])local.knockout[rk]={};
+  local.knockout[rk][mk]={fl:team.fl,nm:team.nm};
+  lsSet('bracket_'+user,local); renderKO();
+}
+
+async function saveKnockout(){
+  const btn=document.getElementById('saveKOBtn'); btn.disabled=true; btn.textContent='Saving…';
+  try{ const id=lsGet('binId_'+user); if(id)await jbSet(id,local); lsSet('bracket_'+user,local); toast('Knockout picks saved to cloud! ✓'); }
+  catch{ lsSet('bracket_'+user,local); toast('Saved locally (offline)',true); }
+  btn.disabled=false; btn.textContent='💾 Save Knockout Picks';
+}
+
+// ══════════════════════════════════════════════════
+// LEADERBOARD
+// ══════════════════════════════════════════════════
+async function renderLeaderboard(){
+  const el=document.getElementById('lbcontent'); el.innerHTML='<div class="spin"></div>';
+  if(!isConfigured()){el.innerHTML='<div class="empty">⚙️ Setup not complete. Click the Config tab.</div>';return;}
+  try{
+    const shared=await jbGet(cfg().sharedBinId);
+    const users=shared.users||[], results=shared.results||{groups:{},knockout:{}};
+    if(!users.length){el.innerHTML='<div class="empty">No participants yet.<br>Share this page URL with your colleagues!</div>';return;}
+
+    const brackets=await Promise.all(users.map(async u=>{
+      try{return{name:u.name,data:await jbGet(u.binId)};}
+      catch{return{name:u.name,data:lsGet('bracket_'+u.name)||{groups:{},knockout:{}}};}
+    }));
+
+    const scores=brackets.map(({name,data})=>{
+      let g=0,k=0;
+      Object.entries(data.groups||{}).forEach(([grp,preds])=>{
+        const rg=results.groups?.[grp]||{};
+        Object.entries(preds).forEach(([t,p])=>{if(p&&rg[t]==p)g++;});
+      });
+      Object.entries(data.knockout||{}).forEach(([round,matches])=>{
+        const res=results.knockout?.[round]||{};
+        Object.entries(matches).forEach(([mk,t])=>{if(res[mk]&&res[mk].nm===t.nm)k+=RPTS[round]||0;});
+      });
+      return{name,g,k,tot:g+k};
+    });
+
+    scores.sort((a,b)=>b.tot-a.tot);
+    const max=Math.max(1,scores[0]?.tot||1);
+    const medals=['🥇','🥈','🥉'];
+    const hasRes=Object.keys(results.groups||{}).length>0||Object.keys(results.knockout||{}).length>0;
+
+    el.innerHTML=`
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
+        🟢 Live · ${scores.length} participant${scores.length!==1?'s':''}
+        ${hasRes?' · scoring active':' · enter results to activate scoring'}
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:10px">
+        <table class="lbtbl">
+          <thead><tr><th style="width:36px">#</th><th>Participant</th><th>Groups</th><th>Knockout</th><th>Total</th><th style="min-width:80px">Progress</th></tr></thead>
+          <tbody>
+            ${scores.map((s,i)=>`
+            <tr class="${i<3?'r'+(i+1):''}">
+              <td><span class="rnum">${i+1}</span></td>
+              <td><div style="display:flex;align-items:center;gap:8px">
+                <div class="av">${s.name.charAt(0).toUpperCase()}</div>
+                <span style="font-weight:${s.name===user?'600':'400'}">${s.name}</span>
+                ${s.name===user?'<span style="color:var(--grn);font-size:11px;font-weight:600">(you)</span>':''}
+                ${medals[i]||''}
+              </div></td>
+              <td style="color:var(--muted)">${s.g}</td>
+              <td style="color:var(--muted)">${s.k}</td>
+              <td><span class="sbig">${s.tot}</span></td>
+              <td><div class="pbw"><div class="pbf" style="width:${Math.round((s.tot/max)*100)}%"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">${Math.round((s.tot/max)*100)}%</div></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">${hasRes?'✓ Scores reflect all entered results':'⚠️ All scores are 0 until results are entered in the Results tab'}</div>`;
+  } catch(e){
+    el.innerHTML=`<div class="empty"><div style="font-size:32px;margin-bottom:10px">⚠️</div>
+      <p>Could not load leaderboard.</p>
+      <p style="font-size:12px;margin-top:8px">Check your JSONBin credentials in ⚙ Config.<br><em>${e.message}</em></p></div>`;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════════════
+async function renderResults(){
+  const el=document.getElementById('rescontent'); el.innerHTML='<div class="spin"></div>';
+  try{ const s=await jbGet(cfg().sharedBinId); pendingResults=JSON.parse(JSON.stringify(s.results||{groups:{},knockout:{}})); }
+  catch{ pendingResults=lsGet('results')||{groups:{},knockout:{}}; }
+
+  let html='<div class="two-col">';
+  html+='<div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;letter-spacing:.5px;color:var(--grn);margin-bottom:14px">Group Final Positions</div>';
+  Object.entries(GROUPS).forEach(([g,data])=>{
+    html+=`<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.6px;margin-bottom:6px">GROUP ${g}</div>`;
+    data.t.forEach(t=>{
+      const sv=pendingResults.groups?.[g]?.[t[1]]||'';
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+        <span style="font-size:15px">${t[0]}</span><span style="flex:1;font-size:12px">${t[1]}</span>
+        <select class="psel-res" onchange="setRG('${g}','${t[1]}',this.value)">
+          <option value="" ${!sv?'selected':''}>–</option>
+          <option value="1" ${sv==1?'selected':''}>1st</option>
+          <option value="2" ${sv==2?'selected':''}>2nd</option>
+          <option value="3" ${sv==3?'selected':''}>3rd</option>
+          <option value="4" ${sv==4?'selected':''}>4th</option>
+        </select></div>`;
+    });
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;letter-spacing:.5px;color:var(--grn);margin-bottom:14px">Knockout Stage Winners</div>';
+  ROUNDS.forEach(r=>{
+    html+=`<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.6px;margin-bottom:6px">${r.label.toUpperCase()}</div>`;
+    for(let m=0;m<r.n;m++){
+      const sv=pendingResults.knockout?.[r.key]?.['m'+m]?.nm||'';
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-size:11px;color:var(--muted);width:28px;flex-shrink:0">M${m+1}</span>
+        <input type="text" placeholder="Winning team" value="${sv.replace(/"/g,'&quot;')}"
+          style="flex:1;padding:6px 10px;font-size:12px;border:1.5px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;background:var(--card);color:var(--txt);outline:none"
+          onfocus="this.style.borderColor='var(--grn)'" onblur="this.style.borderColor='var(--border)'"
+          onchange="setRK('${r.key}','m${m}',this.value)">
+      </div>`;
+    }
+    html+='</div>';
+  });
+  html+='</div></div>';
+  el.innerHTML=html;
+}
+
+function setRG(g,team,val){
+  if(!pendingResults.groups[g])pendingResults.groups[g]={};
+  if(val)pendingResults.groups[g][team]=+val; else delete pendingResults.groups[g][team];
+}
+function setRK(rk,mk,nm){
+  if(!pendingResults.knockout[rk])pendingResults.knockout[rk]={};
+  if(nm.trim())pendingResults.knockout[rk][mk]={nm:nm.trim()}; else delete pendingResults.knockout[rk][mk];
+}
+
+async function saveResults(){
+  const btn=document.getElementById('saveResBtn'); btn.disabled=true; btn.textContent='Saving…';
+  try{
+    const shared=await jbGet(cfg().sharedBinId);
+    shared.results=pendingResults;
+    await jbSet(cfg().sharedBinId,shared);
+    lsSet('results',pendingResults);
+    toast('Results saved! All leaderboards updated ✓');
+  } catch{ lsSet('results',pendingResults); toast('Saved locally (offline)',true); }
+  btn.disabled=false; btn.textContent='✓ Save Official Results';
+}
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+let _tt=null;
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(err?' err':'')+' show';
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3600);
+}
+</script>
+</body>
+</html>
